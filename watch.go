@@ -1,7 +1,6 @@
 package main
 
 import (
-	"log"
 	"os"
 	"path/filepath"
 	"strings"
@@ -28,7 +27,7 @@ func walkerWithStatusCheck(root string, watcher *fsnotify.Watcher, reflexes []*R
 		})
 	})
 	go router.Run(":9090")
-	log.Println("Application is ready to hear new events and healthcheck is running on :9090/health")
+	infoPrintln(-1, "Application is ready to hear new events and healthcheck is running on :9090/health")
 }
 
 func watch(root string, watcher *fsnotify.Watcher, names chan<- string, done chan<- error, reflexes []*Reflex) {
@@ -37,7 +36,8 @@ func watch(root string, watcher *fsnotify.Watcher, names chan<- string, done cha
 		select {
 		case e := <-watcher.Events:
 			if verbose {
-				infoPrintln(-1, "fsnotify event:", e)
+				infoPrintln(-1, "Modified Path:", e.Name)
+				infoPrintln(-1, "Operation:", e.Op)
 			}
 			stat, err := os.Stat(e.Name)
 			if os.IsNotExist(err) {

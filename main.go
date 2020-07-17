@@ -191,6 +191,7 @@ func main() {
 	for i := range reflexes {
 		broadcastChanges[i] = make(chan string)
 	}
+	infoPrintln(-1, "Application Started to watch files/directory. Waiting until watching finish (This may take a couple of minutes, depending the amount of files) ... ")
 	go watch(".", watcher, changes, done, reflexes)
 	go broadcast(broadcastChanges, changes)
 	go printOutput(stdout, os.Stdout)
